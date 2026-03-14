@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Primary Meta Tags -->
+  <meta name="title" content="Fast SAM 3D Body: Accelerating SAM 3D Body for Real-Time Full-Body Human Mesh Recovery">
+  <meta name="description" content="Fast SAM 3D Body is a training-free acceleration framework that reformulates the SAM 3D Body inference pipeline for real-time human mesh recovery, achieving up to 10.9x end-to-end speedup while maintaining reconstruction fidelity.">
+  <meta name="keywords" content="Human Mesh Recovery, Acceleration, Humanoid Control, SMPL, Real-Time, SAM 3D Body">
+  <!-- TODO: Replace with actual author names -->
+  <meta name="author" content="First Author, Second Author, Third Author">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Fast SAM 3D Body">
+  <meta property="og:title" content="Fast SAM 3D Body: Accelerating SAM 3D Body for Real-Time Full-Body Human Mesh Recovery">
+  <meta property="og:description" content="A training-free acceleration framework achieving up to 10.9x end-to-end speedup for full-body human mesh recovery, enabling real-time humanoid robot control from a single RGB stream.">
+  <!-- TODO: Replace with actual project URL -->
+  <meta property="og:url" content="https://fast-sam-3d-body.github.io/">
+  <meta property="og:image" content="static/images/social_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Fast SAM 3D Body: Real-Time Full-Body Human Mesh Recovery">
+  <meta property="article:published_time" content="2026-03-11T00:00:00.000Z">
+  <!-- TODO: Replace with actual author names -->
+  <meta property="article:author" content="First Author, Second Author, Third Author">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="Human Mesh Recovery">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Fast SAM 3D Body: Accelerating SAM 3D Body for Real-Time Full-Body Human Mesh Recovery">
+  <meta name="twitter:description" content="A training-free acceleration framework achieving up to 10.9x end-to-end speedup for full-body human mesh recovery, enabling real-time humanoid robot control from a single RGB stream.">
+  <!-- TODO: Replace with actual URL -->
+  <meta name="twitter:image" content="https://fast-sam-3d-body.github.io/static/images/social_preview.png">
+  <meta name="twitter:image:alt" content="Fast SAM 3D Body: Real-Time Full-Body Human Mesh Recovery">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="Fast SAM 3D Body: Accelerating SAM 3D Body for Real-Time Full-Body Human Mesh Recovery">
+  <!-- TODO: Replace with actual author names in Last, First format -->
+  <meta name="citation_author" content="Author, First">
+  <meta name="citation_author" content="Author, Second">
+  <meta name="citation_author" content="Author, Third">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_conference_title" content="Under Review">
+  <!-- TODO: Replace with actual PDF URL -->
+  <meta name="citation_pdf_url" content="https://fast-sam-3d-body.github.io/static/pdfs/fast_sam_3d_body.pdf">
+
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#374151">
+  <meta name="msapplication-TileColor" content="#374151">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://documentcloud.adobe.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+  <title>Fast SAM 3D Body</title>
+
+  <!-- Favicon and App Icons -->
+  <link rel="icon" type="image/png" href="static/images/icon.png">
+  <link rel="apple-touch-icon" href="static/images/icon.png">
+
+  <!-- Critical CSS - Load synchronously -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <!-- Non-critical CSS - Load asynchronously -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+  <!-- Fallback for browsers that don't support preload -->
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+
+  <!-- Fonts - Optimized loading -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "Fast SAM 3D Body: Accelerating SAM 3D Body for Real-Time Full-Body Human Mesh Recovery",
+    "description": "A training-free acceleration framework that reformulates the SAM 3D Body inference pipeline for real-time human mesh recovery, achieving up to 10.9x end-to-end speedup while maintaining reconstruction fidelity.",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "First Author"
+      },
+      {
+        "@type": "Person",
+        "name": "Second Author"
+      },
+      {
+        "@type": "Person",
+        "name": "Third Author"
+      }
+    ],
+    "datePublished": "2026",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Under Review"
+    },
+    "url": "https://fast-sam-3d-body.github.io/",
+    "image": "https://fast-sam-3d-body.github.io/static/images/social_preview.png",
+    "keywords": [
+      "Human Mesh Recovery",
+      "Acceleration",
+      "Humanoid Control",
+      "SMPL",
+      "Real-Time"
+    ],
+    "abstract": "SAM 3D Body (3DB) achieves state-of-the-art accuracy in monocular 3D human mesh recovery, yet its inference latency of several seconds per image precludes real-time application. We present Fast SAM 3D Body, a training-free acceleration framework that reformulates the 3DB inference pathway to achieve interactive rates. By decoupling serial spatial dependencies and applying architecture-aware pruning, we enable parallelized multi-crop feature extraction and streamlined transformer decoding. Moreover, to extract the joint-level kinematics (SMPL) compatible with existing humanoid control and policy learning frameworks, we replace the iterative mesh fitting with a direct feedforward mapping, accelerating this specific conversion by over 10,000x. Overall, our framework delivers up to a 10.9x end-to-end speedup while maintaining on-par reconstruction fidelity, even surpassing 3DB on benchmarks such as LSPET. We demonstrate its utility by deploying Fast SAM 3D Body in a vision-only teleoperation system that enables real-time humanoid control and the direct collection of manipulation policies from a single RGB stream.",
+    "isAccessibleForFree": true,
+    "license": "https://creativecommons.org/licenses/by/4.0/"
+  }
+  </script>
+
+  <!-- Website/Organization Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Fast SAM 3D Body",
+    "url": "https://fast-sam-3d-body.github.io"
+  }
+  </script>
+</head>
+<body>
+<!-- particles.js container -->
+<div id="particles-js"></div>
+
+<!-- scripts -->
+<script src="particles.js"></script>
+<script src="static/js/app.js"></script>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+
+  <main id="main-content">
+
+  <!-- Floating Table of Contents -->
+  <nav class="toc-sidebar" id="toc-sidebar">
+    <div class="toc-header">Contents</div>
+    <ul class="toc-list">
+      <li><a href="#section-abstract" class="toc-link" data-section="section-abstract">Abstract</a></li>
+      <li><a href="#section-teleop" class="toc-link" data-section="section-teleop">Humanoid Teleoperation</a></li>
+      <li><a href="#section-results" class="toc-link" data-section="section-results">Qualitative Results</a></li>
+      <li><a href="#BibTeX" class="toc-link" data-section="BibTeX">BibTeX</a></li>
+    </ul>
+    <div class="toc-progress"><div class="toc-progress-bar" id="toc-progress-bar"></div></div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <br><br>
+            <h1 class="title is-2 publication-title">Fast SAM 3D Body: Accelerating SAM 3D Body for Real-Time Full-Body Human Mesh Recovery</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- TODO: Replace with actual author names and links -->
+              <span class="author-block">
+                First Author<sup>1</sup>,</span>
+              <span class="author-block">
+                Second Author<sup>2,3</sup>,</span>
+              <span class="author-block">
+                Third Author<sup>3</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <!-- TODO: Replace with actual institutions -->
+              <span class="author-block"><sup>1</sup>Institution 1 &nbsp; <sup>2</sup>Institution 2 &nbsp; <sup>3</sup>Institution 3</span>
+              <br>
+              <span class="eql-cntrb"><small>Under Review</small></span>
+            </div>
+
+                  <div class="column has-text-centered">
+                    <div class="publication-links">
+                      <span class="link-block">
+                        <a href="static/pdfs/fast_sam_3d_body.pdf" target="_blank"
+                        class="external-link button is-normal is-rounded">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                    </span>
+
+                  <!-- TODO: Replace with your GitHub repository URL -->
+                  <!-- <span class="link-block">
+                    <a href="https://github.com/YOUR REPO HERE" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span> -->
+
+                <!-- TODO: Replace with actual arXiv link -->
+                <!-- <span class="link-block">
+                  <a href="https://arxiv.org/abs/XXXX.XXXXX" target="_blank"
+                  class="external-link button is-normal is-rounded">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Teaser Figure -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <!-- TODO: Replace with teaser image or video when available -->
+      <img src="static/figures/top_fig.jpg" alt="Speed-accuracy overview of Fast SAM 3D Body" style="width: 100%; border-radius: 12px;">
+      <br>
+      <h2 class="subtitle has-text-centered">
+        Fast SAM 3D Body achieves up to <span style="color:#ff3838;">10.9&times;</span> end-to-end speedup and over <span style="color:#ff3838;">10,000&times;</span> faster MHR-to-SMPL conversion, enabling real-time humanoid control from a single RGB stream.
+      </h2>
+    </div>
+  </div>
+</section>
+<!-- End teaser -->
+
+<!-- Paper abstract -->
+<section class="section hero" id="section-abstract">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            SAM 3D Body (3DB) achieves state-of-the-art accuracy in monocular 3D human mesh recovery, yet its inference latency of several seconds per image precludes real-time application. We present <b>Fast SAM 3D Body</b>, a training-free acceleration framework that reformulates the 3DB inference pathway to achieve interactive rates. By decoupling serial spatial dependencies and applying architecture-aware pruning, we enable parallelized multi-crop feature extraction and streamlined transformer decoding. Moreover, to extract the joint-level kinematics (SMPL) compatible with existing humanoid control and policy learning frameworks, we replace the iterative mesh fitting with a direct feedforward mapping, accelerating this specific conversion by over 10,000&times;. Overall, our framework delivers up to a 10.9&times; end-to-end speedup while maintaining on-par reconstruction fidelity, even surpassing 3DB on benchmarks such as LSPET. We demonstrate its utility by deploying Fast SAM 3D Body in a vision-only teleoperation system that&mdash;unlike methods reliant on wearable IMUs&mdash;enables <b>real-time humanoid control</b> and the direct collection of manipulation policies from a single RGB stream.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+<!-- Humanoid Teleoperation -->
+<section class="hero teaser" id="section-teleop">
+  <div class="hero-body">
+    <br>
+    <div class="columns is-centered has-text-centered">
+      <h2 class="title is-3">Real-Time Humanoid Teleoperation</h2>
+    </div>
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <p class="subtitle is-6">
+            Fast SAM 3D Body enables real-time, vision-only teleoperation of the Unitree G1 humanoid robot at ~65 ms latency per frame on an NVIDIA RTX 5090. The system directly translates SMPL kinematics for robotic control, enabling collection of whole-body manipulation policies from a single RGB stream.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Object Manipulation (hardest — interaction with environment) -->
+    <div class="container is-max-widescreen video-category">
+      <h4 class="title is-5 has-text-centered video-category-title">Object Manipulation</h4>
+      <div class="video-scroll-wrapper video-scroll-wrapper--single">
+        <div class="video-scroll-track video-scroll-track--center">
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/lifting box.mp4" type="video/mp4"></video>
+            <p class="video-label">Lifting Box</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kneeling & Lower Body (complex balance + transitions) -->
+    <div class="container is-max-widescreen video-category">
+      <h4 class="title is-5 has-text-centered video-category-title">Kneeling &amp; Lower Body</h4>
+      <div class="video-scroll-wrapper">
+        <div class="video-scroll-track">
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/alternating-single-knee-switch.mp4" type="video/mp4"></video>
+            <p class="video-label">Alternating Knee Switch</p>
+          </div>
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/Stand up to a half-kneeling position.mp4" type="video/mp4"></video>
+            <p class="video-label">Stand Up to Half-Kneeling</p>
+          </div>
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/Single-knee lift.mp4" type="video/mp4"></video>
+            <p class="video-label">Single-Knee Lift</p>
+          </div>
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/Left Side-on single-knee kneel.mp4" type="video/mp4"></video>
+            <p class="video-label">Left Side-on Kneel</p>
+          </div>
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/Right Side-on single-knee kneel.mp4" type="video/mp4"></video>
+            <p class="video-label">Right Side-on Kneel</p>
+          </div>
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/single-knee kneel.mp4" type="video/mp4"></video>
+            <p class="video-label">Single-Knee Kneel</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upper Body & Full Body -->
+    <div class="container is-max-widescreen video-category">
+      <h4 class="title is-5 has-text-centered video-category-title">Upper Body &amp; Full Body</h4>
+      <div class="video-scroll-wrapper">
+        <div class="video-scroll-track">
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/Crouch and rotate.mp4" type="video/mp4"></video>
+            <p class="video-label">Crouch and Rotate</p>
+          </div>
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/Raise hands and squat.mp4" type="video/mp4"></video>
+            <p class="video-label">Raise Hands and Squat</p>
+          </div>
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/Arm raise with a swivel.mp4" type="video/mp4"></video>
+            <p class="video-label">Arm Raise with Swivel</p>
+          </div>
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/upper-body gestures.mp4" type="video/mp4"></video>
+            <p class="video-label">Upper-Body Gestures</p>
+          </div>
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/Raise elbow.mp4" type="video/mp4"></video>
+            <p class="video-label">Raise Elbow</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Locomotion (simplest) -->
+    <div class="container is-max-widescreen video-category">
+      <h4 class="title is-5 has-text-centered video-category-title">Locomotion</h4>
+      <div class="video-scroll-wrapper">
+        <div class="video-scroll-track">
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/Turn and move forward.mp4" type="video/mp4"></video>
+            <p class="video-label">Turn and Move Forward</p>
+          </div>
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/Forward and backward.mp4" type="video/mp4"></video>
+            <p class="video-label">Forward and Backward</p>
+          </div>
+          <div class="video-scroll-card">
+            <video preload="metadata" playsinline controls muted loop><source src="./static/videos/Move forward.mp4" type="video/mp4"></video>
+            <p class="video-label">Move Forward</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- End Humanoid Teleoperation -->
+
+<!-- Qualitative Results -->
+<section class="hero teaser" id="section-results">
+  <div class="hero-body">
+    <br>
+    <div class="columns is-centered has-text-centered">
+      <h2 class="title is-3">Qualitative Results</h2>
+    </div>
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <p class="subtitle is-6">
+            Visual comparison between SAM 3D Body and our accelerated Fast SAM 3D Body on diverse in-the-wild images. Our method preserves high-fidelity reconstruction quality across challenging scenarios.
+          </p>
+          <!-- TODO: Replace with comparison figure (convert PDF to PNG/SVG for web) -->
+          <img src="static/figures/compare_sam3d_body.jpg" alt="Qualitative comparison with SAM 3D Body" style="width: 100%; border-radius: 12px;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Qualitative Results -->
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <!-- TODO: Replace with actual BibTeX entry -->
+      <pre id="bibtex-code"><code>@inproceedings{fast_sam_3d_body_2026,
+      title={Fast SAM 3D Body: Accelerating SAM 3D Body for Real-Time Full-Body Human Mesh Recovery},
+      author={First Author and Second Author and Third Author},
+      journal={arXiv preprint},
+      year={2026}
+}</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was adopted from the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  </body>
+  </html>
